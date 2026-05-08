@@ -1,26 +1,313 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-bg: #07080a;
+  --color-bg-elevated: #0c0e11;
+  --color-bg-glass: rgba(14, 16, 20, 0.55);
+  --color-line: #1a1d22;
+  --color-line-strong: #2a2e34;
+  --color-text: #ededed;
+  --color-text-muted: #8a8f98;
+  --color-text-faint: #4a4f57;
+  --color-accent: #c6ff00;
+  --color-accent-dim: #8aaa00;
+  --color-accent-cool: #2dd4bf;
+  --color-accent-cool-dim: #155e63;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --shadow-glow: 0 0 40px -8px rgba(198, 255, 0, 0.5);
+  --shadow-glass: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 24px 60px -24px rgba(0, 0, 0, 0.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-dim);
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.cursor-blink::after {
+  content: "_";
+  display: inline-block;
+  margin-left: 0.1em;
+  animation: blink 1s steps(1) infinite;
+  color: var(--color-accent);
+}
+
+/* Calm aurora — slow-moving blurred gradient meshes that replace the rotating
+   wireframe. Reads as ambient atmosphere, not "look I imported drei." */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.aurora::before,
+.aurora::after,
+.aurora-c {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.aurora::before {
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(
+    circle,
+    rgba(198, 255, 0, 0.18) 0%,
+    rgba(198, 255, 0, 0) 65%
+  );
+  top: -20%;
+  left: -10%;
+  animation: aurora-drift-1 28s ease-in-out infinite alternate;
+}
+.aurora::after {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(
+    circle,
+    rgba(45, 212, 191, 0.22) 0%,
+    rgba(45, 212, 191, 0) 65%
+  );
+  bottom: -15%;
+  right: -10%;
+  animation: aurora-drift-2 32s ease-in-out infinite alternate;
+}
+.aurora-c {
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(
+    circle,
+    rgba(45, 212, 191, 0.12) 0%,
+    rgba(45, 212, 191, 0) 70%
+  );
+  top: 30%;
+  left: 35%;
+  animation: aurora-drift-3 40s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(15vw, 10vh) scale(1.15); }
+}
+@keyframes aurora-drift-2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-12vw, -8vh) scale(1.1); }
+}
+@keyframes aurora-drift-3 {
+  0% { transform: translate(0, 0) scale(0.9); }
+  100% { transform: translate(-10vw, 12vh) scale(1.2); }
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='1'/></svg>");
+}
+
+.gradient-text {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #b8b8b8 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.shimmer-name {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  isolation: isolate;
+}
+.shimmer-name-base,
+.shimmer-name-glow {
+  display: block;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.shimmer-name-base {
+  background-image: linear-gradient(180deg, #ffffff 0%, #969696 100%);
+}
+.shimmer-name-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    420px circle at var(--mx) var(--my),
+    rgba(198, 255, 0, 1) 0%,
+    rgba(198, 255, 0, 0.4) 22%,
+    transparent 55%
+  );
+  mix-blend-mode: screen;
+}
+
+.accent-glow {
+  text-shadow: 0 0 24px rgba(198, 255, 0, 0.6);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Star-style twinkle on the bright contribution cells. Calm for ~88% of
+   the cycle, then a sharp brightness + scale pop with a soft outer halo
+   that decays over a few hundred ms. Randomized per-cell delays in
+   HeroBgHeatmap.tsx scatter them so the wall feels alive without ever
+   being noisy. */
+@keyframes cell-twinkle {
+  0%, 86%, 100% {
+    filter: brightness(1) drop-shadow(0 0 0 rgba(198, 255, 0, 0));
+    transform: scale(1);
+  }
+  88% {
+    filter: brightness(2.5) drop-shadow(0 0 12px rgba(255, 255, 255, 0.95));
+    transform: scale(1.22);
+  }
+  91% {
+    filter: brightness(1.7) drop-shadow(0 0 8px rgba(198, 255, 0, 0.7));
+    transform: scale(1.08);
+  }
+  96% {
+    filter: brightness(1.1) drop-shadow(0 0 3px rgba(198, 255, 0, 0.25));
+    transform: scale(1.02);
+  }
+}
+
+/* Glass surface — frosted dark panel with thin highlight on top edge.
+   The composite shadow gives it depth without looking like a 2010 card. */
+.glass {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow-glass);
+  border-radius: 14px;
+}
+.glass-flat {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tilt-card {
+  --glare-x: 50%;
+  --glare-y: 50%;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tilt-glare {
+  position: relative;
+}
+.tilt-glare::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    240px circle at var(--glare-x) var(--glare-y),
+    rgba(198, 255, 0, 0.12),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+  border-radius: inherit;
+}
+.tilt-card:hover.tilt-glare::after {
+  opacity: 1;
+}
+
+/* Branch / commit / SHA visual primitives — borrowed from real git UIs */
+.sha {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--color-text-faint);
+}
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4em;
+  padding: 0 0.35em;
+  height: 1.4em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Markdown content presentation */
+.md-content h1,
+.md-content h2,
+.md-content h3 {
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+.md-content code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  padding: 0.12em 0.35em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  color: var(--color-accent);
 }
