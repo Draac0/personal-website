@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 const SITE_URL = "https://abhisriram.com";
 const SITE_TITLE = "abhinav/me";
 const SITE_DESCRIPTION =
-  "Fullstack engineer — GenAI tooling, backend systems, and the occasional side quest. Hyderabad → Remote.";
+  "Fullstack engineer @ Boston Bioprocess (US).";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

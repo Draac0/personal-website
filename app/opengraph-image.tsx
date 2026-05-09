@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
+import { fetchContributions, PRIMARY_USERNAME } from "./lib/github";
 
 export const alt =
-  "Abhinav Sriram — fullstack engineer. GenAI tooling, backend systems, side quests.";
+  "Abhinav Sriram — fullstack engineer @ Boston Bioprocess (US).";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -20,30 +21,9 @@ const LEVEL_COLORS = [
   "#c6ff00",
 ];
 
-// Deterministic pseudo-random level grid: 53 weeks × 7 days, biased toward
-// higher levels on the right (more recent) so the strip feels alive.
-function buildCells(): number[][] {
-  const cols: number[][] = [];
-  for (let col = 0; col < 53; col++) {
-    const week: number[] = [];
-    for (let row = 0; row < 7; row++) {
-      const seed = (col * 37 + row * 71 + 13) % 100;
-      const recencyBoost = col / 53;
-      const r = (seed / 100 + recencyBoost * 0.4) % 1;
-      let level = 0;
-      if (r > 0.55) level = 1;
-      if (r > 0.72) level = 2;
-      if (r > 0.85) level = 3;
-      if (r > 0.94) level = 4;
-      week.push(level);
-    }
-    cols.push(week);
-  }
-  return cols;
-}
-
-export default function OG() {
-  const cells = buildCells();
+export default async function OG() {
+  const contribs = await fetchContributions(PRIMARY_USERNAME);
+  const weeks = contribs.weeks; // weeks[col][row]; row 0 = Sun
   const cellSize = 14;
   const gap = 4;
 
@@ -60,7 +40,6 @@ export default function OG() {
           position: "relative",
         }}
       >
-        {/* Top metadata bar — github-repo style */}
         <div
           style={{
             display: "flex",
@@ -92,7 +71,6 @@ export default function OG() {
           <span>main</span>
         </div>
 
-        {/* Body */}
         <div
           style={{
             flex: 1,
@@ -118,19 +96,17 @@ export default function OG() {
           <div
             style={{
               marginTop: 28,
-              fontSize: 30,
+              fontSize: 32,
               color: TEXT_MUTED,
-              maxWidth: 920,
+              maxWidth: 1000,
               lineHeight: 1.35,
               display: "flex",
             }}
           >
-            Fullstack engineer — GenAI tooling, backend systems, and the
-            occasional side quest.
+            Fullstack engineer @ Boston Bioprocess (US).
           </div>
         </div>
 
-        {/* Bottom: contribution-cell strip + footer */}
         <div
           style={{
             display: "flex",
@@ -140,20 +116,20 @@ export default function OG() {
           }}
         >
           <div style={{ display: "flex", gap }}>
-            {cells.map((week, col) => (
+            {weeks.map((week, col) => (
               <div
                 key={col}
                 style={{ display: "flex", flexDirection: "column", gap }}
               >
-                {week.map((level, row) => (
+                {week.map((day, row) => (
                   <div
                     key={row}
                     style={{
                       width: cellSize,
                       height: cellSize,
                       borderRadius: 3,
-                      background: LEVEL_COLORS[level],
-                      ...(level === 4
+                      background: LEVEL_COLORS[day.level],
+                      ...(day.level === 4
                         ? { boxShadow: `0 0 10px rgba(198,255,0,0.45)` }
                         : {}),
                     }}
@@ -175,7 +151,7 @@ export default function OG() {
             }}
           >
             <span>abhisriram.com</span>
-            <span>fullstack · genai · backend</span>
+            <span>{contribs.total} contributions · 12 mo</span>
           </div>
         </div>
       </div>

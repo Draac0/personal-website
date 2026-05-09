@@ -2,7 +2,7 @@ export const profile = {
   name: "Abhinav Sriram",
   short: "Abhinav",
   tagline: "Fullstack engineer / builder",
-  current: "Software Engineer @ Boston Bioprocess",
+  current: "Fullstack Engineer @ Boston Bioprocess (US)",
   location: "Hyderabad → Remote",
   bio: [
     "I'm a fullstack engineer — comfortable across the stack, but most at home owning systems end-to-end. APIs, infra, frontends, models — whatever the problem actually needs.",

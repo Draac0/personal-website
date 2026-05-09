@@ -11,7 +11,7 @@ export const repo = {
   owner: "abhinav",
   name: "me",
   branch: "main",
-  description: "fullstack engineer · genai tooling · backend systems · the occasional side quest",
+  description: "fullstack engineer @ boston bioprocess (us)",
   topics: ["typescript", "nestjs", "postgres", "aws", "langchain", "react", "fastapi"],
 };
 
