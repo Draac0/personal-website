@@ -7,7 +7,13 @@ import { FileTree } from "./FileTree";
 import { StatusLine } from "./StatusLine";
 import { CommandPalette } from "./CommandPalette";
 
-export function RepoShell({ children }: { children: React.ReactNode }) {
+export function RepoShell({
+  children,
+  contribTotal,
+}: {
+  children: React.ReactNode;
+  contribTotal: number;
+}) {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -36,6 +42,7 @@ export function RepoShell({ children }: { children: React.ReactNode }) {
       <RepoTopBar
         onOpenPalette={() => setPaletteOpen(true)}
         onToggleSidebar={() => setSidebarOpen((o) => !o)}
+        contribTotal={contribTotal}
       />
 
       <div className="relative z-10 flex">

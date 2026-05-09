@@ -3,9 +3,17 @@ import { posts, postsByCategory, categoryLabels, type PostCategory } from "../da
 import { WritingArchive } from "../components/WritingArchive";
 
 export const metadata: Metadata = {
-  title: "posts/ — abhinav/me",
+  title: "posts",
   description:
     "Engineering stories, hackathon journals, book notes, and consumer rants — 29 entries.",
+  alternates: { canonical: "/writing" },
+  openGraph: {
+    title: "posts · abhinav/me",
+    description:
+      "Engineering stories, hackathon journals, book notes, and consumer rants.",
+    url: "/writing",
+    type: "website",
+  },
 };
 
 export default function WritingPage() {

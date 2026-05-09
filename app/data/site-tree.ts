@@ -13,9 +13,6 @@ export const repo = {
   branch: "main",
   description: "fullstack engineer · genai tooling · backend systems · the occasional side quest",
   topics: ["typescript", "nestjs", "postgres", "aws", "langchain", "react", "fastapi"],
-  stars: 598,
-  watchers: 29,
-  forks: 5,
 };
 
 export const tree: FileNode[] = [

@@ -36,9 +36,25 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const post = posts.find((p) => p.slug === slug);
   if (!post) return { title: "Not found" };
+  const url = `/writing/${post.slug}`;
   return {
-    title: `${post.title} — abhinav/me`,
+    title: post.title,
     description: post.summary,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.summary,
+      url,
+      publishedTime: `${post.date}-01`,
+      authors: ["Abhinav Sriram"],
+      tags: post.hashtags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+    },
   };
 }
 
